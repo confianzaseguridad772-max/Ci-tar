@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA CRED - REGISTRO</title>
+    <title>REGISTRAR CITAS CRED</title>
     <style>
         :root { --primary: #1e40af; --secondary: #0ea5e9; --accent: #10b981; --bg: #f1f5f9; --text: #1e293b; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; width: 100%; max-width: 650px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; }
+        .container { background: white; width: 100%; max-width: 650px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: var(--primary); margin-top: 0; font-size: 28px; }
         .status-msg { text-align: center; font-size: 13px; font-weight: bold; padding: 8px; border-radius: 5px; margin-bottom: 20px; display: none; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -18,11 +18,10 @@
         button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s ease; }
         button:hover { background: #1e3a8a; }
 
-        /* Estilos del Mensaje Modal (Cero avisos del navegador) */
-        #customModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 300px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .modal-content h3 { color: var(--primary); margin-top: 0; }
-        .modal-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; }
+        /* Modal Personalizado */
+        #customModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 320px; width: 90%; }
+        .modal-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
         @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
     </style>
@@ -31,8 +30,8 @@
 
 <div id="customModal">
     <div class="modal-content">
-        <h3 id="modalTitle">¡ÉXITO!</h3>
-        <p id="modalMsg">La cita se registró correctamente.</p>
+        <h3 id="modalTitle">AVISO</h3>
+        <p id="modalMsg"></p>
         <button class="modal-btn" onclick="closeModal()">ACEPTAR</button>
     </div>
 </div>
@@ -44,7 +43,7 @@
     <form id="citaForm">
         <div class="form-group">
             <label>DNI (8 dígitos):</label>
-            <input type="number" name="DNI" id="dniInput" placeholder="Ej: 12345678" required oninput="limitDNI(this)">
+            <input type="number" name="DNI" id="dniInput" placeholder="Ej: 12345678" required oninput="if(this.value.length > 8) this.value = this.value.slice(0,8);">
         </div>
 
         <div class="form-group">
@@ -90,16 +89,21 @@
             <label>ESTABLECIMIENTO DE SALUD (EESS):</label>
             <input list="listaEESS" name="EESS" id="eessInput" placeholder="Escriba para buscar..." required>
             <datalist id="listaEESS">
-                <option value="C.S. SURCO">
-                <option value="C.S. MIRAFLORES">
-                <option value="C.S. AMARILIS">
-                <option value="C.S. PERÚ COREA">
+                <option value="C.S. AREQUIPA NOR">
+                <option value="C.S. HUANCAYE">
+                <option value="C.S. AMATICO DE NEYUDA">
+                <option value="C.S. PUNTA HERMOSA">
                 <option value="C.S. LLICUA">
                 <option value="C.S. SANTA MARÍA DEL VALLE">
                 <option value="C.S. LAS MORAS">
                 <option value="C.S. APARICIO POMARES">
                 <option value="C.S. ACOMAYO">
                 <option value="P.S. LA ESPERANZA">
+                <option value="P.S. IRCO SUR">
+                <option value="C.S. SURCO">
+                <option value="C.S. MIRAFLORES">
+                <option value="HOSPITAL REGIONAL DE TRUJILLO">
+                <option value="HOSPITAL GOYENECHE AREQUIPA">
             </datalist>
         </div>
 
@@ -108,38 +112,35 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAOx3g7_MmXC5SyS7rjeP-osc-dXLXDgywU1V189ewgRz2ySSYA-g-dZ5gEvNHeNSn/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw7J_CQF2fLt1VtVtaYgDw3j-VEHpGwWU5i8HjX4i1kXn8jwtbh7PEw2BQx-qGv1o3Q/exec'; // <--- REEMPLAZA ESTO
     const form = document.getElementById('citaForm');
     const statusBox = document.getElementById('statusBox');
 
-    // 1. Restricción estricta de 8 dígitos en PC y Móvil
-    function limitDNI(element) {
-        if (element.value.length > 8) {
-            element.value = element.value.slice(0, 8);
-        }
-    }
-
-    // 2. Manejo de Modal Personalizado
     function showModal(title, msg) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMsg').innerText = msg;
         document.getElementById('customModal').style.display = 'flex';
     }
-    function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
-    // 3. Conversión de fecha robusta para corregir el error de carga
+    // Función definitiva para corregir el orden Día/Mes/Año al cargar datos
     function convertirAFechaInput(fechaRaw) {
         if (!fechaRaw) return "";
-        let fecha = new Date(fechaRaw);
-        // Si la fecha es inválida por formato string DD/MM/YYYY
-        if (isNaN(fecha.getTime())) {
-            const p = fechaRaw.toString().split('/');
-            if(p.length === 3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-            return "";
+        let str = fechaRaw.toString();
+        // Si viene como DD/MM/YYYY o DD/MM/YY
+        if (str.includes('/')) {
+            const p = str.split('/');
+            const dia = p[0].padStart(2, '0');
+            const mes = p[1].padStart(2, '0');
+            const anio = p[2].length === 2 ? "20" + p[2] : p[2];
+            return `${anio}-${mes}-${dia}`;
         }
-        return fecha.toISOString().split('T')[0];
+        // Si viene como objeto Date de Google
+        try {
+            let d = new Date(fechaRaw);
+            if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
+        } catch(e) {}
+        return "";
     }
 
     // Búsqueda de DNI
@@ -148,7 +149,7 @@
         if (dni.length === 8) {
             statusBox.style.display = 'block';
             statusBox.style.background = '#e0f2fe';
-            statusBox.innerText = "🔍 Buscando historial...";
+            statusBox.innerText = "🔍 Buscando la cita más reciente...";
             try {
                 const response = await fetch(`${scriptURL}?dni=${dni}`);
                 const data = await response.json();
@@ -162,27 +163,21 @@
                     if(data.consultorio) document.getElementById('consInput').value = data.consultorio;
                     
                     statusBox.style.background = '#dcfce7';
-                    statusBox.innerText = "✅ Datos cargados correctamente.";
+                    statusBox.innerText = "✅ Datos cargados (Última cita encontrada).";
                 } else {
                     statusBox.style.background = '#fef3c7';
                     statusBox.innerText = "👤 Paciente nuevo.";
                 }
-            } catch (e) { 
-                statusBox.innerText = "⚠️ Error al conectar con base de datos."; 
-            }
-        } else {
-            statusBox.style.display = 'none';
-        }
+            } catch (e) { statusBox.innerText = "⚠️ Error de red."; }
+        } else { statusBox.style.display = 'none'; }
     });
 
     form.addEventListener('submit', e => {
         e.preventDefault();
-        
-        // Validación de EESS
         const eessVal = document.getElementById('eessInput').value;
         const opciones = Array.from(document.querySelectorAll('#listaEESS option')).map(o => o.value);
         if (!opciones.includes(eessVal)) {
-            showModal("ERROR", "Debe seleccionar un establecimiento de la lista.");
+            showModal("ERROR", "Seleccione un establecimiento de la lista.");
             return;
         }
 
@@ -192,16 +187,15 @@
 
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(() => {
-            showModal("¡ÉXITO!", "La cita se ha registrado correctamente.");
+            showModal("¡ÉXITO!", "Registro guardado correctamente.");
             form.reset();
             statusBox.style.display = 'none';
             btn.disabled = false;
             btn.innerText = "REGISTRAR CITA";
         })
         .catch(() => {
-            showModal("ERROR", "No se pudo conectar con el servidor.");
+            showModal("ERROR", "Error de conexión.");
             btn.disabled = false;
-            btn.innerText = "REGISTRAR CITA";
         });
     });
 </script>
