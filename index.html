@@ -5,68 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REGISTRAR CITAS CRED</title>
     <style>
-        :root {
-            --primary: #1e40af;
-            --secondary: #0ea5e9;
-            --accent: #10b981;
-            --bg: #f1f5f9;
-            --text: #1e293b;
-        }
-
-        body { 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text);
-            margin: 0; padding: 20px;
-            display: flex; justify-content: center;
-        }
-
-        .container { 
-            background: white; 
-            width: 100%; max-width: 650px; 
-            padding: 40px; 
-            border-radius: 20px; 
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); 
-        }
-
-        h2 { 
-            text-align: center; color: var(--primary); 
-            margin-top: 0; font-size: 28px;
-            letter-spacing: -0.5px;
-        }
-
-        .status-msg {
-            text-align: center; font-size: 13px; font-weight: bold;
-            padding: 8px; border-radius: 5px; margin-bottom: 20px; display: none;
-        }
-
+        :root { --primary: #1e40af; --secondary: #0ea5e9; --accent: #10b981; --bg: #f1f5f9; --text: #1e293b; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; width: 100%; max-width: 650px; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: var(--primary); margin-top: 0; font-size: 28px; }
+        .status-msg { text-align: center; font-size: 13px; font-weight: bold; padding: 8px; border-radius: 5px; margin-bottom: 20px; display: none; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
         .form-group { margin-bottom: 18px; }
-
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #475569; }
-
-        input, select { 
-            width: 100%; padding: 12px; border: 2px solid #e2e8f0; 
-            border-radius: 10px; box-sizing: border-box; font-size: 15px;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none; border-color: var(--secondary);
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
-        }
-
-        button { 
-            width: 100%; padding: 16px; background: var(--primary); 
-            color: white; border: none; border-radius: 10px; 
-            font-size: 16px; font-weight: 700; cursor: pointer; 
-            transition: background 0.3s ease; margin-top: 10px;
-        }
-
+        input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+        input:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+        button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s ease; }
         button:hover { background: #1e3a8a; }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
-
         @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -74,39 +24,38 @@
 
 <div class="container">
     <h2>Registro de Citas CRED</h2>
-    
     <div id="statusBox" class="status-msg"></div>
 
     <form id="citaForm">
         <div class="form-group">
-            <label>DNI (Búsqueda automática):</label>
-            <input type="number" name="DNI" id="dniInput" placeholder="Ingrese 8 dígitos" required>
+            <label>DNI (8 dígitos):</label>
+            <input type="text" name="DNI" id="dniInput" maxlength="8" pattern="\[0-9]{8}" title="Debe ingresar exactamente 8 números" placeholder="Ej: 12345678" required>
         </div>
 
         <div class="form-group">
-            <label>NOMBRE COMPLETO DEL PACIENTE:</label>
+            <label>NOMBRE COMPLETO:</label>
             <input type="text" name="NOMBRE" id="nombreInput" required>
         </div>
 
         <div class="grid">
             <div class="form-group">
-                <label>FECHA DE NACIMIENTO:</label>
+                <label>FECHA NACIMIENTO:</label>
                 <input type="date" name="FECHA_NACIMIENTO" id="nacInput" required>
             </div>
             <div class="form-group">
-                <label>CELULAR DE CONTACTO:</label>
+                <label>CELULAR:</label>
                 <input type="tel" name="CELULAR" id="telInput" required>
             </div>
         </div>
 
         <div class="grid">
             <div class="form-group">
-                <label>FECHA DE CITA PROGRAMADA:</label>
-                <input type="date" name="FECHA_CITA" required>
+                <label>FECHA CITA PROGRAMADA:</label>
+                <input type="date" name="FECHA_CITA" id="citaInput" required>
             </div>
             <div class="form-group">
                 <label>TURNO:</label>
-                <select name="TURNO">
+                <select name="TURNO" id="turnoInput">
                     <option value="MAÑANA">MAÑANA</option>
                     <option value="TARDE">TARDE</option>
                 </select>
@@ -114,8 +63,8 @@
         </div>
 
         <div class="form-group">
-            <label>CONSULTORIO ASIGNADO:</label>
-            <select name="CONSULTORIO">
+            <label>CONSULTORIO:</label>
+            <select name="CONSULTORIO" id="consInput">
                 <option value="CRED- (CONSULTORIO N° 1)">CRED - CONSULTORIO N° 1</option>
                 <option value="CRED- (CONSULTORIO N° 2)">CRED - CONSULTORIO N° 2</option>
                 <option value="CRED- (CONSULTORIO N° 3)">CRED - CONSULTORIO N° 3</option>
@@ -123,8 +72,8 @@
         </div>
 
         <div class="form-group">
-            <label>ESTABLECIMIENTO DE SALUD (Buscar):</label>
-            <input list="listaEESS" name="EESS" id="eessInput" placeholder="Escriba para filtrar establecimientos..." required>
+            <label>ESTABLECIMIENTO DE SALUD (EESS):</label>
+            <input list="listaEESS" name="EESS" id="eessInput" placeholder="Escriba para buscar..." required>
             <datalist id="listaEESS">
                 <option value="HOSPITAL REGIONAL HERMILIO VALDIZÁN">
                 <option value="HOSPITAL CARLOS SHOWING FERRARI">
@@ -144,7 +93,7 @@
                 <option value="C.S. MIRAFLORES">
                 <option value="HOSPITAL REGIONAL DE TRUJILLO">
                 <option value="HOSPITAL GOYENECHE AREQUIPA">
-                     </datalist>
+            </datalist>
         </div>
 
         <button type="submit" id="btnEnviar">REGISTRAR CITA</button>
@@ -152,77 +101,70 @@
 </div>
 
 <script>
-    // ENLACE DE GOOGLE APPS SCRIPT
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzX3EPgWlyeF4GBXLVobkWgdND4RfSqsHVutLcQVvx3gAoBD3YoKRPycFV0mElyrDv8/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAOx3g7_MmXC5SyS7rjeP-osc-dXLXDgywU1V189ewgRz2ySSYA-g-dZ5gEvNHeNSn/exec'; // <--- PEGA TU URL AQUÍ
     const form = document.getElementById('citaForm');
     const statusBox = document.getElementById('statusBox');
 
-    // Búsqueda de DNI automática
+    // Función para convertir DD/MM/YYYY del Excel a YYYY-MM-DD del Input
+    function convertirAFechaInput(fechaExcel) {
+        if (!fechaExcel || !fechaExcel.includes('/')) return "";
+        const p = fechaExcel.split('/');
+        return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+    }
+
+    // Búsqueda de DNI
     document.getElementById('dniInput').addEventListener('input', async (e) => {
         const dni = e.target.value;
         if (dni.length === 8) {
             statusBox.style.display = 'block';
-            statusBox.style.background = '#e0f2fe';
-            statusBox.style.color = '#0369a1';
-            statusBox.innerText = "🔍 Buscando historial del paciente...";
-
+            statusBox.innerText = "🔍 Buscando...";
             try {
                 const response = await fetch(`${scriptURL}?dni=${dni}`);
                 const data = await response.json();
-
                 if (data.encontrado) {
                     document.getElementById('nombreInput').value = data.nombre;
                     document.getElementById('telInput').value = data.celular;
                     document.getElementById('eessInput').value = data.eess;
-                    
-                    // Convertir fecha DD/MM/YYYY a YYYY-MM-DD para el input date
-                    if (data.nacimiento && data.nacimiento.includes('/')) {
-                        const parts = data.nacimiento.split('/');
-                        document.getElementById('nacInput').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                    }
-
-                    statusBox.style.background = '#dcfce7';
-                    statusBox.style.color = '#15803d';
-                    statusBox.innerText = "✅ Paciente encontrado. Datos cargados correctamente.";
+                    document.getElementById('nacInput').value = convertirAFechaInput(data.nacimiento);
+                    document.getElementById('citaInput').value = convertirAFechaInput(data.fechaCita);
+                    document.getElementById('turnoInput').value = data.turno;
+                    document.getElementById('consInput').value = data.consultorio;
+                    statusBox.innerText = "✅ Datos cargados.";
                 } else {
-                    statusBox.style.background = '#fef3c7';
-                    statusBox.style.color = '#92400e';
-                    statusBox.innerText = "👤 Paciente nuevo. Por favor complete los datos.";
+                    statusBox.innerText = "👤 Paciente nuevo.";
                 }
-            } catch (error) {
-                console.error('Error!', error);
-                statusBox.innerText = "⚠️ Error al conectar con la base de datos.";
-            }
-        } else {
-            statusBox.style.display = 'none';
+            } catch (e) { statusBox.innerText = "⚠️ Error de red."; }
         }
     });
 
-    // Envío de formulario
     form.addEventListener('submit', e => {
         e.preventDefault();
+        
+        // VALIDACIÓN DE EESS CONTRA LA LISTA
+        const eessVal = document.getElementById('eessInput').value;
+        const opciones = Array.from(document.querySelectorAll('#listaEESS option')).map(o => o.value);
+        if (!opciones.includes(eessVal)) {
+            alert("Error: Debe seleccionar un Establecimiento de la lista.");
+            return;
+        }
+
         const btn = document.getElementById('btnEnviar');
         btn.disabled = true;
-        btn.innerText = "REGISTRANDO";
+        btn.innerText = "REGISTRANDO...";
 
-        // Recolectar datos y asegurar MAYÚSCULAS
-        const formData = new FormData(form);
-        
-        fetch(scriptURL, { method: 'POST', body: formData})
-        .then(response => {
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(() => {
             alert("¡CITA REGISTRADA!");
             form.reset();
             statusBox.style.display = 'none';
             btn.disabled = false;
             btn.innerText = "REGISTRAR CITA";
         })
-        .catch(error => {
-            alert("Error al enviar los datos. Intente nuevamente.");
+        .catch(() => {
+            alert("Error al enviar.");
             btn.disabled = false;
-            btn.innerText = "REGISTRAR CITA";
         });
     });
 </script>
-
 </body>
 </html>
