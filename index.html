@@ -2,73 +2,204 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Citas CRED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Citas CRED - Huánuco</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; }
-        button { margin-top: 20px; width: 100%; padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --bg-color: #f0f4f8;
+            --text-color: #34495e;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { 
+            background: white; 
+            width: 100%;
+            max-width: 550px; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+
+        h2 { 
+            color: var(--primary-color); 
+            text-align: center; 
+            margin-bottom: 25px;
+            font-size: 24px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+            font-size: 14px;
+        }
+
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #dcdfe6; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button { 
+            margin-top: 20px; 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--accent-color); 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background 0.3s;
+        }
+
+        button:hover { background: #219150; }
+        button:disabled { background: #95a5a6; }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Formulario de Citas</h2>
+<div class="container">
+    <h2>Registro de Citas CRED</h2>
     <form id="citaForm">
-        <label>DNI:</label>
-        <input type="text" name="DNI" required>
+        <div class="form-group">
+            <label>DNI:</label>
+            <input type="text" name="DNI" maxlength="8" required>
+        </div>
 
-        <label>Nombre Completo:</label>
-        <input type="text" name="NOMBRE" required>
+        <div class="form-group">
+            <label>NOMBRE COMPLETO:</label>
+            <input type="text" name="NOMBRE" required>
+        </div>
 
-        <label>Fecha de Nacimiento:</label>
-        <input type="date" name="FECHA_NACIMIENTO" required>
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex: 1;">
+                <label>FECHA NACIMIENTO:</label>
+                <input type="date" name="FECHA_NACIMIENTO" required>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>CELULAR:</label>
+                <input type="tel" name="CELULAR" required>
+            </div>
+        </div>
 
-        <label>Celular:</label>
-        <input type="tel" name="CELULAR" required>
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex: 1;">
+                <label>FECHA DE CITA:</label>
+                <input type="date" name="FECHA_CITA" required>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>TURNO:</label>
+                <select name="TURNO">
+                    <option value="MAÑANA">MAÑANA</option>
+                    <option value="TARDE">TARDE</option>
+                </select>
+            </div>
+        </div>
 
-        <label>Fecha de Cita:</label>
-        <input type="date" name="FECHA_CITA" required>
+        <div class="form-group">
+            <label>CONSULTORIO:</label>
+            <select name="CONSULTORIO">
+                <option value="CRED- (CONSULTORIO N° 1)">CRED- (CONSULTORIO N° 1)</option>
+                <option value="CRED- (CONSULTORIO N° 2)">CRED- (CONSULTORIO N° 2)</option>
+                <option value="CRED- (CONSULTORIO N° 3)">CRED- (CONSULTORIO N° 3)</option>
+            </select>
+        </div>
 
-        <label>Turno:</label>
-        <select name="TURNO">
-            <option value="Mañana">Mañana</option>
-            <option value="Tarde">Tarde</option>
-        </select>
+        <div class="form-group">
+            <label>ESTABLECIMIENTO DE SALUD (EESS):</label>
+            <select name="EESS" required>
+                <option value="" disabled selected>Seleccione establecimiento...</option>
+                <option value="HOSPITAL REGIONAL HERMILIO VALDIZAN">HOSPITAL REGIONAL HERMILIO VALDIZÁN</option>
+                <option value="HOSPITAL CARLOS SHOWING FERRARI">HOSPITAL CARLOS SHOWING FERRARI</option>
+                <option value="C.S. AMARILIS">C.S. AMARILIS</option>
+                <option value="C.S. PERU COREA">C.S. PERÚ COREA</option>
+                <option value="C.S. LLICUA">C.S. LLICUA</option>
+                <option value="C.S. SANTA MARIA DEL VALLE">C.S. SANTA MARÍA DEL VALLE</option>
+                <option value="C.S. LAS MORAS">C.S. LAS MORAS</option>
+                <option value="C.S. APARICIO POMARES">C.S. APARICIO POMARES</option>
+                <option value="C.S. ACOMAYO">C.S. ACOMAYO</option>
+                <option value="P.S. LA ESPERANZA">P.S. LA ESPERANZA</option>
+                <option value="OTROS">OTROS / RED DE SALUD</option>
+            </select>
+        </div>
 
-        <label>Consultorio:</label>
-        <select name="CONSULTORIO">
-            <option value="CRED- (CONSULTORIO N° 1)">CRED- (CONSULTORIO N° 1)</option>
-            <option value="CRED- (CONSULTORIO N° 2)">CRED- (CONSULTORIO N° 2)</option>
-            <option value="CRED- (CONSULTORIO N° 3)">CRED- (CONSULTORIO N° 3)</option>
-        </select>
-
-        <label>EESS (Establecimiento de Salud):</label>
-        <input type="text" name="EESS" required>
-
-        <button type="submit" id="btnEnviar">Enviar Datos</button>
+        <button type="submit" id="btnEnviar">REGISTRAR CITA</button>
+        <p class="footer-note">Los datos se enviarán automáticamente a la base de datos central.</p>
     </form>
+</div>
 
-    <script>
-        const form = document.getElementById('citaForm');
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw7MZIEoZTxehZ3_iXdQXEOmLx-rqXc2aJGfGjJr_oe20rmuKlrqRe6zpu-hPQRcRKK/exec'; // <--- PEGA AQUÍ TU URL
+<script>
+    const form = document.getElementById('citaForm');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw7MZIEoZTxehZ3_iXdQXEOmLx-rqXc2aJGfGjJr_oe20rmuKlrqRe6zpu-hPQRcRKK/exec';
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            document.getElementById('btnEnviar').disabled = true;
-            document.getElementById('btnEnviar').innerText = "Enviando...";
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.disabled = true;
+        btn.innerText = "ENVIANDO DATOS...";
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .then(response => {
-                    alert("¡Datos enviados con éxito!");
-                    form.reset();
-                    document.getElementById('btnEnviar').disabled = false;
-                    document.getElementById('btnEnviar').innerText = "Enviar Datos";
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    alert("Hubo un error al enviar.");
-                });
+        // CAPTURAR DATOS Y CONVERTIR TODO A MAYÚSCULAS
+        const formData = new FormData(form);
+        const upperCaseData = new FormData();
+
+        for (let [key, value] of formData.entries()) {
+            // Convertimos el valor a Mayúsculas antes de añadirlo
+            upperCaseData.append(key, value.toUpperCase());
+        }
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: upperCaseData
+        })
+        .then(response => {
+            alert("¡REGISTRO EXITOSO!");
+            form.reset();
+            btn.disabled = false;
+            btn.innerText = "REGISTRAR CITA";
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert("Error en el envío. Verifique su conexión.");
+            btn.disabled = false;
+            btn.innerText = "REGISTRAR CITA";
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
